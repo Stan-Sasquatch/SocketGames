@@ -6,8 +6,13 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT;
-const test = "hellodsssdfssdfd";
-console.log(test);
+const clientOrigin = process.env.CLIENT_URL;
+var corsOptions = {
+	origin: clientOrigin,
+	optionsSuccessStatus: 200,
+};
+
+console.log(corsOptions);
 app.use(cors());
 app.get("/", (req, res) => {
 	res.send({ data: "Hello from the backend" });
