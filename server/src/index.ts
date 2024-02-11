@@ -1,23 +1,29 @@
 import express from "express";
 import dotenv from "dotenv";
-import cors from "cors";
+import { Server } from "socket.io";
+import { createServer } from "node:http";
 
 dotenv.config();
 
-const app = express();
-const port = process.env.PORT;
+const port = +process.env.PORT!;
 const clientOrigin = process.env.CLIENT_URL;
-var corsOptions = {
-	origin: clientOrigin,
-	optionsSuccessStatus: 200,
-};
 
-console.log(corsOptions);
-app.use(cors());
-app.get("/", (req, res) => {
-	res.send({ data: "Hello from the backend" });
+const app = express();
+const httpServer = createServer(app);
+const test = "http://localhost";
+const io = new Server(httpServer, {
+	cors: {
+		origin: clientOrigin,
+		methods: ["GET", "POST", "OPTIONS"],
+		allowedHeaders: ["my-custom-header"],
+		credentials: true,
+	},
 });
 
-app.listen(port, () => {
+io.on("connection", (socket) => {
+	console.log("a user connected 123");
+});
+
+httpServer.listen(port, () => {
 	console.log(`[server]: Server is running at http://localhost:${port}`);
 });
