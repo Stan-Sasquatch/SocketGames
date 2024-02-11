@@ -7,7 +7,7 @@ import { Events } from "./Events";
 
 export function Chat() {
 	const [isConnected, setIsConnected] = useState(socket.connected);
-	const [fooEvents, setFooEvents] = useState([]);
+	const [fooEvents, setFooEvents] = useState<Array<string>>([]);
 
 	useEffect(() => {
 		function onConnect() {
@@ -18,18 +18,18 @@ export function Chat() {
 			setIsConnected(false);
 		}
 
-		function onFooEvent(value) {
+		function onMessageEvent(value: string) {
 			setFooEvents((previous) => [...previous, value]);
 		}
 
 		socket.on("connect", onConnect);
 		socket.on("disconnect", onDisconnect);
-		socket.on("foo", onFooEvent);
+		socket.on("message", onMessageEvent);
 
 		return () => {
 			socket.off("connect", onConnect);
 			socket.off("disconnect", onDisconnect);
-			socket.off("foo", onFooEvent);
+			socket.off("message", onMessageEvent);
 		};
 	}, []);
 

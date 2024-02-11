@@ -1,4 +1,4 @@
-export function Events({ events }) {
+export function Events({ events }: { events: Array<string> }) {
 	return (
 		<ul>
 			{events.map((event, index) => (
