@@ -4,10 +4,11 @@ import { ConnectionState } from "./ConnectionState";
 import { ConnectionManager } from "./ConnectionManager";
 import { MyForm } from "./MyForm";
 import { Events } from "./Events";
+import { OffSocketEvent, OnSocketEvent } from "./socket/helpers";
 
 export function Chat() {
 	const [isConnected, setIsConnected] = useState(socket.connected);
-	const [fooEvents, setFooEvents] = useState<Array<string>>([]);
+	const [messages, setMessages] = useState<Array<string>>([]);
 
 	useEffect(() => {
 		function onConnect() {
@@ -19,24 +20,24 @@ export function Chat() {
 		}
 
 		function onMessageEvent(value: string) {
-			setFooEvents((previous) => [...previous, value]);
+			setMessages((previous) => [...previous, value]);
 		}
 
-		socket.on("connect", onConnect);
-		socket.on("disconnect", onDisconnect);
-		socket.on("message", onMessageEvent);
+		OnSocketEvent({ type: "connect", callBack: onConnect });
+		OnSocketEvent({ type: "disconnect", callBack: onDisconnect });
+		OnSocketEvent({ type: "message", callBack: onMessageEvent });
 
 		return () => {
-			socket.off("connect", onConnect);
-			socket.off("disconnect", onDisconnect);
-			socket.off("message", onMessageEvent);
+			OffSocketEvent({ type: "connect", callBack: onConnect });
+			OffSocketEvent({ type: "disconnect", callBack: onDisconnect });
+			OffSocketEvent({ type: "message", callBack: onMessageEvent });
 		};
 	}, []);
 
 	return (
 		<>
 			<ConnectionState isConnected={isConnected} />
-			<Events events={fooEvents} />
+			<Events events={messages} />
 			<ConnectionManager />
 			<MyForm />
 		</>

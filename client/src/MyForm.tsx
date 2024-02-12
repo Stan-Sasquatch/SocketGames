@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { socket } from "./Socket";
+import { EmitSocketEvent } from "./socket/helpers";
 
 export function MyForm() {
 	const [value, setValue] = useState("");
@@ -13,7 +13,7 @@ export function MyForm() {
 	async function onSubmit(event: React.SyntheticEvent<HTMLFormElement>) {
 		event.preventDefault();
 		setIsLoading(true);
-		socket.emit("message", value);
+		EmitSocketEvent({ type: "message", value });
 		reset();
 	}
 
