@@ -11,7 +11,6 @@ const clientOrigin = process.env.CLIENT_URL;
 
 const app = express();
 const httpServer = createServer(app);
-const test = "http://localhost";
 const io = new Server(httpServer, {
 	cors: {
 		origin: clientOrigin,
@@ -21,12 +20,13 @@ const io = new Server(httpServer, {
 	},
 });
 
-function onMessage(socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>) {
+function onMessage(socket: Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>) {}
+
+io.on("connection", (socket) => {
 	socket.on("message", (msg) => {
 		io.emit("message", msg);
 	});
-}
-io.on("connection", onMessage);
+});
 
 httpServer.listen(port, () => {
 	console.log(`[server]: Server is running at http://localhost:${port}`);

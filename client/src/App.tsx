@@ -1,9 +1,9 @@
-import { Chat } from "./Chat";
+import { NewChat } from "./NewChat";
 
 function App() {
 	return (
 		<>
-			<Chat />
+			<NewChat />
 		</>
 	);
 }
